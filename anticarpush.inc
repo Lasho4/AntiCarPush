@@ -10,19 +10,19 @@ enum (+=1)
     ACP_VEHICLE_USE_TYPE_HASDRIVER
 }
 
-enum e_ucp_vehicle
+enum e_acp_vehicle
 {
-    Float:ucp_vPosX,
-    Float:ucp_vPosY,
-    Float:ucp_vPosZ,
-    Float:ucp_vZAngle,
-    ucp_vUsed
+    Float:acp_vPosX,
+    Float:acp_vPosY,
+    Float:acp_vPosZ,
+    Float:acp_vZAngle,
+    acp_vUsed
 }
-new ucp_Vehicle[MAX_VEHICLES][e_ucp_vehicle];
+new acp_Vehicle[MAX_VEHICLES][e_acp_vehicle];
 
 public OnPlayerExitVehicle(playerid, vehicleid)
 {
-    ucp_Vehicle[vehicleid][ucp_vUsed] = ACP_VEHICLE_USE_TYPE_UNFROZEN;
+    acp_Vehicle[vehicleid][acp_vUsed] = ACP_VEHICLE_USE_TYPE_UNFROZEN;
     #if defined acp_OnPlayerExitVehicle
 		return acp_OnPlayerExitVehicle(playerid, vehicleid);
 	#else
@@ -43,7 +43,7 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 {
     if(newstate == PLAYER_STATE_DRIVER || newstate == PLAYER_STATE_PASSENGER)
     {
-        ucp_Vehicle[GetPlayerVehicleID(playerid)][ucp_vUsed] = ACP_VEHICLE_USE_TYPE_HASDRIVER;
+        acp_Vehicle[GetPlayerVehicleID(playerid)][acp_vUsed] = ACP_VEHICLE_USE_TYPE_HASDRIVER;
     }
     #if defined acp_OnPlayerStateChange
 		return acp_OnPlayerStateChange(playerid, newstate, oldstate);
@@ -64,9 +64,9 @@ public OnPlayerStateChange(playerid, newstate, oldstate)
 
 public OnVehicleSpawn(vehicleid)
 {
-    GetVehiclePos(vehicleid,ucp_Vehicle[vehicleid][ucp_vPosX],ucp_Vehicle[vehicleid][ucp_vPosY],ucp_Vehicle[vehicleid][ucp_vPosZ]);
-    GetVehicleZAngle(vehicleid,ucp_Vehicle[vehicleid][ucp_vZAngle]);
-    ucp_Vehicle[vehicleid][ucp_vUsed] = ACP_VEHICLE_USE_TYPE_UNOCCUPIED;
+    GetVehiclePos(vehicleid,acp_Vehicle[vehicleid][acp_vPosX],acp_Vehicle[vehicleid][acp_vPosY],acp_Vehicle[vehicleid][acp_vPosZ]);
+    GetVehicleZAngle(vehicleid,acp_Vehicle[vehicleid][acp_vZAngle]);
+    acp_Vehicle[vehicleid][acp_vUsed] = ACP_VEHICLE_USE_TYPE_UNOCCUPIED;
     #if defined acp_OnVehicleSpawn
 		return acp_OnVehicleSpawn(vehicleid);
 	#else
@@ -86,18 +86,18 @@ public OnVehicleSpawn(vehicleid)
 public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_x, Float:new_y, Float:new_z, Float:vel_x, Float:vel_y, Float:vel_z)
 {
     if(acp_GetVehicleSpeed(vehicleid) != 0)
-        if(ucp_Vehicle[vehicleid][ucp_vUsed] != ACP_VEHICLE_USE_TYPE_UNFROZEN)
-            ucp_Vehicle[vehicleid][ucp_vUsed] = ACP_VEHICLE_USE_TYPE_UNFROZEN;
-    if(ucp_Vehicle[vehicleid][ucp_vUsed] == ACP_VEHICLE_USE_TYPE_UNFROZEN)
+        if(acp_Vehicle[vehicleid][acp_vUsed] != ACP_VEHICLE_USE_TYPE_UNFROZEN)
+            acp_Vehicle[vehicleid][acp_vUsed] = ACP_VEHICLE_USE_TYPE_UNFROZEN;
+    if(acp_Vehicle[vehicleid][acp_vUsed] == ACP_VEHICLE_USE_TYPE_UNFROZEN)
     {
         if(acp_GetVehicleSpeed(vehicleid) == 0)
         {
-            GetVehiclePos(vehicleid,ucp_Vehicle[vehicleid][ucp_vPosX],ucp_Vehicle[vehicleid][ucp_vPosY],ucp_Vehicle[vehicleid][ucp_vPosZ]);
-            GetVehicleZAngle(vehicleid,ucp_Vehicle[vehicleid][ucp_vZAngle]);
-            ucp_Vehicle[vehicleid][ucp_vUsed] = ACP_VEHICLE_USE_TYPE_UNOCCUPIED;
+            GetVehiclePos(vehicleid,acp_Vehicle[vehicleid][acp_vPosX],acp_Vehicle[vehicleid][acp_vPosY],acp_Vehicle[vehicleid][acp_vPosZ]);
+            GetVehicleZAngle(vehicleid,acp_Vehicle[vehicleid][acp_vZAngle]);
+            acp_Vehicle[vehicleid][acp_vUsed] = ACP_VEHICLE_USE_TYPE_UNOCCUPIED;
         }
     }
-    if(ucp_Vehicle[vehicleid][ucp_vUsed] == 1)
+    if(acp_Vehicle[vehicleid][acp_vUsed] == 1)
     {
         #if defined foreach
         foreach(new i:Player)
@@ -108,10 +108,10 @@ public OnUnoccupiedVehicleUpdate(vehicleid, playerid, passenger_seat, Float:new_
             if(!IsPlayerConnected(i)) continue;
         #endif
                 if(GetPlayerState(i) == PLAYER_STATE_ONFOOT) 
-                    if(IsPlayerInRangeOfPoint(i,3.2,ucp_Vehicle[vehicleid][ucp_vPosX],ucp_Vehicle[vehicleid][ucp_vPosY],ucp_Vehicle[vehicleid][ucp_vPosZ]))
+                    if(IsPlayerInRangeOfPoint(i,3.2,acp_Vehicle[vehicleid][acp_vPosX],acp_Vehicle[vehicleid][acp_vPosY],acp_Vehicle[vehicleid][acp_vPosZ]))
                     {
-                         SetVehiclePos(vehicleid,ucp_Vehicle[vehicleid][ucp_vPosX],ucp_Vehicle[vehicleid][ucp_vPosY],ucp_Vehicle[vehicleid][ucp_vPosZ]);
-                         SetVehicleZAngle(vehicleid,ucp_Vehicle[vehicleid][ucp_vZAngle]);
+                         SetVehiclePos(vehicleid,acp_Vehicle[vehicleid][acp_vPosX],acp_Vehicle[vehicleid][acp_vPosY],acp_Vehicle[vehicleid][acp_vPosZ]);
+                         SetVehicleZAngle(vehicleid,acp_Vehicle[vehicleid][acp_vZAngle]);
                     }
         }
     }
